@@ -1,0 +1,629 @@
+Clase 4 ->
+Clase 5 -> 23/9 No hay clases
+Clase 6 -> Coreccion de ejercicio
+Clase 7 -> 7/10 primer parcial
+
+Pagina 6
+================================
+
+Crear tabla "Proveedores"
+--------------------------------
+
+CREATE TABLE proveedores
+    (numero INT,
+    nombre VARCHAR(100),
+    domicilio VARCHAR(100),
+    localidad VARCHAR(100),
+    CONSTRAINT PK_numero PRIMARY KEY (numero));
+
+INSERT INTO proveedores(numero, nombre, domicilio, localidad) VALUES(101,'Gomez','Nazca 920','Capital Federal');
+INSERT INTO proveedores(numero, nombre, domicilio, localidad) VALUES(102,'Perez','Argerich 1030','Capital Federal');
+INSERT INTO proveedores(numero, nombre, domicilio, localidad) VALUES(103,'Vazquez','Sarmiento 450','Ramos Mejia');
+INSERT INTO proveedores(numero, nombre, domicilio, localidad) VALUES(104,'Lopez','Alsina 720','Avellaneda');
+
+Obtener nombres de las CONSTRAINTS:
+
+SELECT * FROM information_schema.table_constraints
+WHERE table_name = 'tabla'
+
+Crear tabla "Productos"
+--------------------------------
+
+CREATE TABLE productos
+	(pnro int,
+    pnombre VARCHAR(100),
+    precio FLOAT,
+    tamanio VARCHAR(100),
+    localidad VARCHAR(100),
+    CONSTRAINT PK_pnro PRIMARY KEY (pnro));
+
+INSERT INTO productos(pnro,pnombre,precio,tamanio,localidad) VALUES(001,'Talco',5,'Chico','Capital Federal');
+INSERT INTO productos(pnro,pnombre,precio,tamanio,localidad) VALUES(002,'Talco',7,'Mediano','Capital Federal');
+INSERT INTO productos(pnro,pnombre,precio,tamanio,localidad) VALUES(003,'Crema',8,'Grande','Ramos Mejia');
+INSERT INTO productos(pnro,pnombre,precio,tamanio,localidad) VALUES(004,'Cepillo',2,'Grande','Avellaneda');
+INSERT INTO productos(pnro,pnombre,precio,tamanio,localidad) VALUES(005,'Esmalte',1.2,'Normal','Chacarita');
+
+Crear tabla "Prov-Prod"
+--------------------------------
+
+CREATE TABLE prov_prod
+	(numero INT,
+    pnro INT,
+    cantidad INT,
+    CONSTRAINT PK_numero_pnro PRIMARY KEY (numero, pnro),
+    CONSTRAINT FK_numero FOREIGN KEY (numero) REFERENCES proveedores (numero),
+    CONSTRAINT FK_pnro FOREIGN KEY (pnro) REFERENCES productos (pnro));
+
+INSERT INTO prov_prod(numero,pnro,cantidad) VALUES(101,001,300);
+INSERT INTO prov_prod(numero,pnro,cantidad) VALUES(101,002,200);
+INSERT INTO prov_prod(numero,pnro,cantidad) VALUES(101,003,400);
+INSERT INTO prov_prod(numero,pnro,cantidad) VALUES(101,004,200);
+INSERT INTO prov_prod(numero,pnro,cantidad) VALUES(101,005,100);
+INSERT INTO prov_prod(numero,pnro,cantidad) VALUES(102,001,300);
+INSERT INTO prov_prod(numero,pnro,cantidad) VALUES(102,002,400);
+INSERT INTO prov_prod(numero,pnro,cantidad) VALUES(103,002,200);
+INSERT INTO prov_prod(numero,pnro,cantidad) VALUES(104,002,200);
+INSERT INTO prov_prod(numero,pnro,cantidad) VALUES(104,004,300);
+
+Pagina 8
+================================
+
+Crear tabla "ALUMNOS"
+--------------------------------
+
+CREATE TABLE alumnos
+	(legajo INT,
+	nombre VARCHAR(100),
+	domicilio VARCHAR(100),
+	localidad VARCHAR(100),
+	edad INT,
+	CONSTRAINT PK_legajo PRIMARY KEY (legajo));
+
+INSERT INTO alumnos(legajo,nombre,domicilio,localidad,edad) VALUES(6097,'Perez, Juan','Nazca 920','Capital Federal',19);
+INSERT INTO alumnos(legajo,nombre,domicilio,localidad,edad) VALUES(6102,'Gomez, Alex','Artigas 1320','Capital Federal',20);
+INSERT INTO alumnos(legajo,nombre,domicilio,localidad,edad) VALUES(6110,'Pari, Oscar','Puan 760','Capital Federal',21);
+INSERT INTO alumnos(legajo,nombre,domicilio,localidad,edad) VALUES(6115,'Nero, Franco','Mitre 545','Avellaneda',19);
+INSERT INTO alumnos(legajo,nombre,domicilio,localidad,edad) VALUES(6123,'Menen, Ana','Mitre 670','Avellaneda',18);
+INSERT INTO alumnos(legajo,nombre,domicilio,localidad,edad) VALUES(6130,'Roca, Alicia','Alsina 54','Ramos Mejia',22);
+
+Crear tabla "EXAMENES"
+--------------------------------
+
+CREATE TABLE examenes
+    (legajo INT,
+    materia VARCHAR(100),
+    nota INT,
+    CONSTRAINT PK_legajo_materia PRIMARY KEY(legajo,materia),
+    CONSTRAINT FK_legajo FOREIGN KEY(legajo) REFERENCES alumnos(legajo));
+
+INSERT INTO examenes(legajo,materia,nota) VALUES(6097,'Matematica',7);
+INSERT INTO examenes(legajo,materia,nota) VALUES(6097,'Programacion I',8);
+INSERT INTO examenes(legajo,materia,nota) VALUES(6102,'Programacion I',5);
+INSERT INTO examenes(legajo,materia,nota) VALUES(6102,'Programacion II',7);
+INSERT INTO examenes(legajo,materia,nota) VALUES(6115,'Matematica',4);
+INSERT INTO examenes(legajo,materia,nota) VALUES(6123,'Laboratorio I',9);
+INSERT INTO examenes(legajo,materia,nota) VALUES(6123,'Bases de datos',9);
+
+ALTER TABLE examenes ADD CONSTRAINT FK_legajo FOREIGN KEY(legajo) REFERENCES alumnos(legajo);
+
+Ejercicios:
+
+Pagina 8
+================================
+A) ¿Que Cardinalidad tiene la tabla "alumnos"?
+    Respuesta: Cardinalidad (numero de filas): 6
+
+B) ¿Cual es el grado de la relacion de la tabla "alumnos"?
+    Respuesta: Grado de la relacion (numero de columnas): 5
+
+C) ¿Dicha tabla representa una una entidad o una interrelacion? Justificar.
+    Respuesta: Representa una entidad por que todos los datos son propios de la tabla.
+
+D) Definir el dominio para la columna "nota" de la tabla examenes.
+    Respuesta: Dominio (el conjunto de valores que puede tomar la columna): 0 a 10.
+
+E) Colocar un nombre tecnico para la relacion (la tabla originariamente se llamaba "tabla 1")
+    Respuesta: EXAMENES.
+
+F) Identificar cual o cuales campos pueden identificar a la fila univocamente en la tabla "examenes".
+    Respuesta: legajo y materia.
+
+Pagina 11
+================================
+1) Crear una vista formada por los numeros de proveedores y numeros de productos situados en diferentes localidades.
+Respuesta: CREATE VIEW V_num_prov_prod as SELECT prov.numero,prod.pnro
+           FROM proveedores prov, productos prod
+           WHERE prov.localidad != prod.localidad;
+
+2) Agregar la columna "importador" a la tabla "productos".
+Respuesta: ALTER TABLE productos ADD COLUMN(importador VARCHAR(100));
+
+3) Crear una vista formada por los registros de los proveedores que viven en "Wilde".
+Respuesta: CREATE VIEW V_proveedores_wilde AS
+           SELECT * FROM proveedores WHERE localidad = 'Wilde';
+
+4) Crear las tablas "departamentos" y "empleados" con sus relaciones y las tablas "pacientes" y "medicamentos" con sus relaciones.
+Respuesta: CREATE TABLE departamentos
+               (numero INT,
+               nombre VARCHAR(100),
+               CONSTRAINT PK_numero PRIMARY KEY(numero));
+
+CREATE TABLE empleados
+   (legajo INT,
+   nombre VARCHAR(100),
+   departamento INT,
+   CONSTRAINT PK_legajo PRIMARY KEY(legajo),
+   CONSTRAINT FK_departamento FOREIGN KEY(departamento) REFERENCES departamentos(numero));
+
+CREATE TABLE pacientes
+   (dni INT,
+   nombre VARCHAR(100),
+   CONSTRAINT PK_dni PRIMARY KEY(dni));
+
+CREATE TABLE medicamentos
+   (codigo INT,
+   nombre VARCHAR(100),
+   CONSTRAINT PK_CODIGO PRIMARY KEY(codigo));
+
+CREATE TABLE pacientes_medicamentos
+   (paciente INT,
+   medicamento INT,
+   cantidad INT,
+   CONSTRAINT PK_paciente_medicamento PRIMARY KEY(paciente,medicamento),
+   CONSTRAINT FK_paciente FOREIGN KEY(paciente) REFERENCES pacientes(dni),
+   CONSTRAINT FK_medicamento FOREIGN KEY(medicamento) REFERENCES medicamentos(codigo));
+
+Pagina 21
+================================
+- Realizar las siguientes proposiciones SQL con la siguiente estructura:
+
+PROVEEDORES(NUMERO,NOMBRE,DOMICILIO,LOCALIDAD)
+PRODUCTOS(PNRO,PNOMBRE,PRECIO,TAMANIO,LOCALIDAD)
+PROV_PROD(NUMERO,PNRO,CANTIDAD)
+
+1) Obtener los detalles completos de todos los productos.
+Respuesta: SELECT * FROM productos
+
+2) Obtener los detalles completos de todos los proveedores de "Capital".
+Respuesta: SELECT * FROM proveedores WHERE localidad="Capital Federal";
+
+3) Obtener todos los envios en los cuales la cantidad esta entre 200 y 300 inclusive.
+Respuesta: SELECT * FROM prov_prod WHERE cantidad>=200 AND cantidad<=300;
+
+4) Obtener todos los numeros de los productos suministrados por algun proveedor de Avellaneda.
+Respuesta: SELECT pnro FROM prov_prod WHERE numero IN(SELECT numero FROM proveedores WHERE localidad="Avellaneda");
+
+5) Obtener la cantidad total del producto 001 enviado por el proveedor 103.
+Respuesta: SELECT SUM(cantidad) AS cantidad_total FROM prov_prod WHERE pnro=1 AND numero=103
+
+6) Obtener los numeros de los productos y localidades en los cuales la segunda letra del nombre de la localidad sea A.
+Respuesta: SELECT pnro,localidad FROM productos WHERE localidad LIKE '_a%';
+
+7) Obtener los precios de los productos enviados por el proveedor 102.
+Respuesta: SELECT precio FROM productos WHERE pnro IN(SELECT pnro FROM prov_prod WHERE numero=102);
+
+8) Construir una lista de todas las localidades en las cuales este situado por lo menos un proveedor o un producto.
+Respuesta: SELECT localidad
+           FROM proveedores
+           UNION
+           SELECT localidad
+           FROM productos
+
+9) Cambiar a "Chico" el tamaño de todos los productos "Medianos".
+Respuesta: UPDATE productos SET tamanio='Chico' WHERE tamanio='Mediano';
+
+10) Eliminar todos los productos para los cuales no haya envios.
+Respuesta: SELECT pnro FROM productos WHERE pnro NOT IN (SELECT pnro FROM prov_prod);
+           DELETE FROM productos WHERE pnro NOT IN(SELECT pnro FROM prov_prod);
+
+11) Insertar un nuevo proveedor (107) en la tabla "proveedores". El nombre y la localidad son "Rosales" y "Wilde" respectivamente;
+    el domicilio no se conoce todavia.
+Respuesta: INSERT INTO proveedores(numero,nombre,domicilio) VALUES(107,'Rosales','Wilde');
+
+
+Pagina 22
+================================
+
+2) Dadas las siguientes tablas:
+
+CLIENTES (codigo_cliente, nombre, domicilio, provincia)
+PRODUCTOS (codigo_producto, nombre_producto)
+ITEM_VENTAS (numero_factura, codigo_producto, cantidad, precio)
+VENTAS (numero_factura, codigo_cliente, fecha)
+
+CREATE TABLE clientes
+    (codigo_cliente INT,
+    nombre VARCHAR(100),
+    domicilio VARCHAR(100),
+    provincia VARCHAR(100),
+    CONSTRAINT PK_codigo_cliente PRIMARY KEY(codigo_cliente));
+
+INSERT INTO clientes(codigo_cliente,nombre,domicilio,provincia) VALUES(6097,'Perez, Juan','Nazca 920','Buenos Aires');
+INSERT INTO clientes(codigo_cliente,nombre,domicilio,provincia) VALUES(6102,'Gomez, Alex','Artigas 1320','La Rioja');
+INSERT INTO clientes(codigo_cliente,nombre,domicilio,provincia) VALUES(6110,'Pari, Oscar','Puan 760','Tucuman');
+INSERT INTO clientes(codigo_cliente,nombre,domicilio,provincia) VALUES(6115,'Nero, Franco','Mitre 545','Formosa');
+INSERT INTO clientes(codigo_cliente,nombre,domicilio,provincia) VALUES(6123,'Menen, Ana','Mitre 670','Chubut');
+INSERT INTO clientes(codigo_cliente,nombre,domicilio,provincia) VALUES(6130,'Roca, Alicia','Alsina 54','Cordoba');
+
+CREATE TABLE productos
+    (codigo_producto INT,
+    nombre_producto VARCHAR(100),
+    CONSTRAINT PK_codigo_producto PRIMARY KEY(codigo_producto));
+
+INSERT INTO productos(codigo_producto,nombre_producto) VALUES(001,'a');
+INSERT INTO productos(codigo_producto,nombre_producto) VALUES(002,'b');
+INSERT INTO productos(codigo_producto,nombre_producto) VALUES(003,'c');
+INSERT INTO productos(codigo_producto,nombre_producto) VALUES(004,'d');
+INSERT INTO productos(codigo_producto,nombre_producto) VALUES(005,'e');
+
+CREATE TABLE item_ventas
+    (numero_factura INT,
+    codigo_producto INT,
+    cantidad INT,
+    precio FLOAT,
+    CONSTRAINT FK_numero_factura FOREIGN KEY(numero_factura) REFERENCES ventas(numero_factura),
+    CONSTRAINT FK_codigo_producto FOREIGN KEY(codigo_producto) REFERENCES productos(codigo_producto));
+
+INSERT INTO item_ventas(numero_factura,codigo_producto,cantidad,precio) VALUES(1,001,5,50);
+INSERT INTO item_ventas(numero_factura,codigo_producto,cantidad,precio) VALUES(2,002,17,10);
+INSERT INTO item_ventas(numero_factura,codigo_producto,cantidad,precio) VALUES(3,003,3,15.8);
+INSERT INTO item_ventas(numero_factura,codigo_producto,cantidad,precio) VALUES(4,004,22,12);
+
+CREATE TABLE ventas
+    (numero_factura INT,
+    codigo_cliente INT,
+    fecha DATETIME,
+    CONSTRAINT PK_numero_factura PRIMARY KEY(numero_factura),
+    CONSTRAINT FK_codigo_cliente FOREIGN KEY(codigo_cliente) REFERENCES clientes(codigo_cliente));
+
+INSERT INTO ventas(numero_factura,codigo_cliente) VALUES(1,6097);
+INSERT INTO ventas(numero_factura,codigo_cliente) VALUES(2,6130);
+INSERT INTO ventas(numero_factura,codigo_cliente) VALUES(3,6123);
+INSERT INTO ventas(numero_factura,codigo_cliente) VALUES(4,6115);
+
+Resolver las siguientes consultas:
+
+1) Obtener la cantidad de unidades maximas:
+Respuesta: SELECT MAX(cantidad) AS cantidad_maxima FROM ITEM_VENTAS;
+
+2) Obtener la cantidad total de unidades vendidas del producto c.
+Respuesta: SELECT cantidad FROM item_ventas WHERE codigo_producto IN(SELECT codigo_producto FROM productos WHERE nombre_producto='c');
+
+3) Cantidad de unidades vendidas por producto, indicando la descripcion del producto, ordenado de mayor a menor por las cantidades vendidas.
+Respuesta: SELECT iv.cantidad,p.nombre_producto
+           FROM item_ventas iv, productos p
+           WHERE iv.codigo_producto=p.codigo_producto
+           ORDER BY iv.cantidad
+           DESC;
+
+4) Cantidad de unidades vendidas por producto, indicando la descripcion del producto, ordenado alfabeticamente por nombre de producto para los productos que vendieron mas de 30 unidades.
+Respuesta:
+
+5) Obtener cuantas compras (1 factura = 1 compra) realizo cada cliente indicando el codigo y nombre del cliente ordenado de mayor a menor.
+Respuesta: SELECT
+           COUNT(v.codigo_cliente)
+           AS cantidad_compras,
+           v.codigo_cliente,
+           c.nombre
+           FROM ventas v, clientes c
+           WHERE v.codigo_cliente=c.codigo_cliente
+           GROUP BY codigo_cliente;
+
+6) Promedio de unidades vendidas por producto, indicando el codigo del producto para el cliente 1.
+Respuesta:
+
+3) Se tiene la siguiente base de datos relacional:
+
+documentos (cod_documento, descripcion)
+oficinas (cod_oficina, codigo_director, descripcion)
+empleados (cod_empleado, apellido, nombre, fecha_nacimiento, num_doc, cod_jefe, cod_oficina, cod_documento)
+datos_contratos (cod_empleado, fecha_contrato, cuota, ventas)
+fabricantes (cod_fabricante, razon_social)
+listas (cod_lista, descripcion, ganancia)
+productos (cod_producto, descripcion, precio, cantidad_stock, punto_reposicion, cod_fabricante)
+precios (cod_producto, cod_lista, precio)
+clientes (cod_cliente, cod_lista, razon_social)
+pedidos (cod_pedido, fecha_pedido, cod_empleado, cod_cliente)
+detalle_pedidos (cod_pedido, numero_linea, cod_producto, cantidad)
+
+INSERT INTO `empleados`(`cod_empleado`, `apellido`, `nombre`, `fecha_nacimiento`, `num_doc`, `cod_jefe`, `cod_oficina`, `cod_documento`) VALUES (1,'mendez','juan','1997-11-15',40793784,6587,80,6565);
+
+- Resolver las siguientes consultas utilizando sentencias SQL:
+
+Consultas simples (una sola tabla)
+
+1) Obtener una lista con los nombres de las distintas oficinas de la empresa.
+Respuesta: SELECT descripcion FROM oficinas;
+
+2) Obtener una lista de todos los productos indicando descripcion del producto, su precio de costo y su precio de costo IVA incluido (tomar el IVA como 21%).
+Respuesta: SELECT descripcion,precio,precio * 1.21 AS precio_con_IVA FROM productos;
+
+3) Obtener una lista indicando para cada empleado apellido, nombre, fecha de cumpleaños y edad.
+Respuesta: SELECT apellido,nombre,DATE_FORMAT(fecha_nacimiento,'%m/%d') AS cumpleanios,TIMESTAMPDIFF(YEAR,fecha_nacimiento,NOW()) AS edad FROM empleados;
+
+4) Listar todos los empleados que tienen un jefe asignado.
+Respuesta: SELECT * FROM empleados WHERE cod_jefe != 0;
+
+5) Listar los empleados con nombre "Maria" ordenado por apellido.
+Respuesta: SELECT * FROM empleados WHERE nombre = 'Maria' ORDER BY apellido;
+
+6) Listar los clientes cuya razon social comience con "L" ordenado por codigo de cliente.
+Respuesta: SELECT * FROM clientes WHERE razon_social LIKE 'L%' ORDER BY cod_cliente;
+
+7) Listar toda la informacion de los pedidos de Marzo ordenado por fecha de pedido.
+Respuesta: SELECT * FROM pedidos WHERE fecha_pedido LIKE '_____03%' ORDER BY fecha_pedido;
+
+8) Listar las oficinas que no tienen asignado director.
+Respuesta: SELECT * FROM oficinas WHERE codigo_director = 0;
+
+9) Listar los 4 productos de menor precio de costo.
+Respuesta: SELECT * FROM productos ORDER BY precio ASC LIMIT 4;
+
+10) Listar los codigos de empleados de los tres que tengan la mayor cuota.
+Respuesta: SELECT cod_empleado FROM datos_contratos ORDER BY cuota DESC LIMIT 3;
+
+Consultas multitablas
+
+1) De cada producto listar descripcion, razon social del fabricante, y stock ordenado por razon social y descripcion.
+Respuesta:
+
+2) De cada pedido listar codigo de pedido, fecha de pedido, apellido del empleado y razon social del cliente.
+Respuesta:
+
+3) Listar por cada empleado apellido, cuota asignada, oficina a la que pertenece ordenado en forma descendente por cuota.
+Respuesta:
+
+4) Listar sin repetir la razon social de todos aquellos clientes que hicieron pedidos en abril.
+Respuesta:
+
+5) Listar sin repetir los productos que fueron pedidos en marzo.
+Respuesta:
+
+6) Listar aquellos empleados que estan contratados por mas de 10 años ordenado por cantidad de años en forma descendente.
+Respuesta:
+
+7) Obtener una lista de los clientes mayoristas ordenada por razon social.
+Respuesta:
+
+8) Obtener una lista sin repetir que indique que productos compro cada cliente, ordenada por razon social y descripcion.
+Respuesta:
+
+9) Obtener una lista con la descripcion de aquellos productos cuyo stock esta por debajo del punto de reposicion indicando cantidad a comprar 
+   y razon social del fabricante ordenada por razon social y descripcion.
+Respuesta:
+
+10) Listar aquellos empleados cuya cuota es menor a 50.000 o mayor a 100.000.
+Respuesta:
+
+Pagina 25
+================================
+1) ¿Cuales tablas contienen la columna "localidad"?
+2) ¿Cuantas columnas tiene la tabla "productos"?
+3) Obtener una lista de todos los usuarios dueños de por lo menos una tabla, junto con el numero de tablas que le pertenecen a cada uno.
+4) Obtener una lista de los nombres de todas las tablas que tienen por lo menos un indice.
+
+Pagina 32
+================================
+1) Una base de datos hospitalaria contiene las siguientes relaciones:
+
+pacientes (codigo_pac, apellido_pac, edad)
+medicamentos (codigo_med, precio_unitario)
+gastos (codigo_pac, codigo_med)
+
+- Indicar las claves primarias y claves ajenas de cada relacion.
+
+pacientes: codigo_pac es clave primaria
+medicamentos: codigo_mec es clave primaria
+gastos: codigo_pac y codigo_mec es una clave primaria compuesta
+codigo_pac es clave foranea de la tabla pacientes
+codigo_mec es clave foranea de la tabla medicamentos
+
+2) Dadas las siguientes relaciones:
+
+cursos (num_curso, titulo)
+ofrecimientos (num_curso, num_ofr, fecha, aula)
+profesores (num_curso, num_ofr, num_emp)
+estudiantes (num_curso, num_ofr, num_emp, calificacion)
+empleados (num_emp, nombre_empleado, puesto)
+
+- Indicar las claves primarias y claves ajenas de cada relacion.
+
+cursos: num_curso clave primaria
+ofrecimientos: num_curso clave ajena, num_ofr clave primaria
+profesores: num_curso es clave foranea, num_ofr es clave foranea, num_emp es clave foranea, las tres forman una clave primaria
+estudiantes: num_curso es clave foranea, num_ofr es clave foranea, num_emp es clave foranea, todas forman clave primaria
+empleados: num_emp es clave primaria
+
+3) Dadas las siguientes tablas:
+
+empleados (cod_emp, nombre, apellido, tipo_doc, num_doc, categoria, cod_ofic)
+oficinas (cod_ofic, descripcion)
+
+Crear las siguientes reglas de integridad:
+
+- La columna "cod_empleado" debe ser clave primaria.
+- La columna "cod_emp" debe tener valores entre 100 y 1000.
+- Las columnas "tipo_doc" y "num_doc" deben contener valores no repetidos (unicos).
+- La columna "categoria" debe contener algunos de los siguientes valores: senior, semi senior, junior.
+- La columna "cod_ofic" debe tener valores que existan en la tabla oficinas.
+
+- ALTER TABLE ADD(CONSTRAINT PK_cod_empelado PRIMARY KEY(cod_empleado));
+- ALTER TABLE ADD(CONSTRAINT CK_cod_emp CHECK(cod_emp > 100 AND cod_emp < 1000));
+- ALTER TABLE ADD(CONSTRAINT UK_tipo_num_doc UNIQUE(tipo_doc,num_doc));
+- ALTER TABLE ADD(CONSTRAINT CK_categoria CHECK(categoria = 'senior', categoria = 'semi senior', categoria = 'junior'));
+- ALTER TABLE ADD(CONSTRAINT FK_cod_ofic FOREIGN KEY(cod_ofic) REFERENCES oficinas(cod_ofic));
+
+
+primer parcial
+
+CREATE TABLE facultades
+(cod_facultad INT,
+nombre VARCHAR(100),
+CONSTRAINT PK_cod_facultad PRIMARY KEY(cod_facultad));
+
+
+INSERT INTO facultades VALUES(1,'UTN');
+INSERT INTO facultades VALUES(2,'UBA');
+INSERT INTO facultades VALUES(3,'UNLA');
+
+
+CREATE TABLE investigadores
+(cod_investigador INT,
+nombre VARCHAR(100),
+apellido VARCHAR(100),
+cod_facultad INT,
+CONSTRAINT PK_cod_investigador PRIMARY KEY(cod_investigador),
+CONSTRAINT FK_cod_facultad FOREIGN KEY(cod_facultad) REFERENCES facultades(cod_facultad));
+
+INSERT INTO investigadores VALUES(1,'Fernando','Lareu',1);
+INSERT INTO investigadores VALUES(2,'Miguel','Diaz',1);
+INSERT INTO investigadores VALUES(3,'Pedro','Sanches',2);
+INSERT INTO investigadores VALUES(4,'Juan','Fernandes',2);
+INSERT INTO investigadores VALUES(5,'Valentina','Valdes',3);
+
+CREATE TABLE reservas
+(cod_reserva INT,
+cod_investigador INT,
+fecha_inicio INT,
+fecha_fin INT,
+CONSTRAINT PK_cod_reserva PRIMARY KEY(cod_reserva),
+CONSTRAINT FK_cod_investigador FOREIGN KEY(cod_investigador) REFERENCES investigadores(cod_investigador));
+
+INSERT INTO reservas VALUES(1,1,10,11);
+INSERT INTO reservas VALUES(2,2,10,15);
+INSERT INTO reservas VALUES(3,3,9,20);
+INSERT INTO reservas VALUES(4,3,17,23);
+INSERT INTO reservas VALUES(5,1,25,30);
+
+CREATE TABLE equipos
+(nro_serie INT,
+descripcion VARCHAR(100),
+cod_facultad INT,
+CONSTRAINT PK_nro_serie PRIMARY KEY(nro_serie),
+CONSTRAINT FK_cod_facultad_equipos FOREIGN KEY(cod_facultad) REFERENCES facultades(cod_facultad));
+
+CREATE TABLE detalle_reservas
+(cod_reserva INT,
+nro_serie INT,
+CONSTRAINT PK_cod_reserva_nro_serie PRIMARY KEY(cod_reserva,nro_serie));
+
+SELECT nombre,apellido
+FROM investigadores
+WHERE cod_investigador
+IN(
+    SELECT cod_investigador
+    FROM reservas
+    GROUP BY cod_investigador
+    HAVING COUNT(*) > 1);
+
+SELECT f.nombre
+FROM facultades f
+WHERE cod_facultad
+NOT IN(
+    SELECT cod_facultad
+    FROM investigadores i, reservas r
+    WHERE i.cod_investigador = r.cod_investigador);
+
+    CREATE TABLE auditoria();
+
+    
+SELECT nombre FROM farmacia_1_productos
+UNION
+SELECT nombre FROM farmacia_2_productos
+UNION
+SELECT nombre FROM farmacia_3_productos;
+
+SELECT f.nombre_farmacia,count(codigo_producto) FROM farmacias f,
+
+
+SEGUNDO PARCIAL
+===============
+
+Pagina 93
+================================
+
+10.6.6) ALUMNOS(nombre,legajo,direccion,telefono,telefono_opcional,fecha_nacimiento,sexo,departamento_carrera,departamento_especialidad)
+        DEPARTAMENTOS(codigo,nombre)
+        CURSOS(nombre,codigo,horas,nivel,profesor,año)
+        BOLETAS(legajo,curso,nota,fecha)
+
+        A) ALUMNOS(nombre,legajo,direccion,telefono,fecha_nacimiento,sexo,departamento_carrera,departamento_especialidad)
+           TELEFONOS(legajo,telefono_opcional)
+           DEPARTAMENTOS(codigo,nombre)
+           CURSOS(nombre,codigo,horas,nivel,profesor,año)
+           BOLETAS(legajo,curso,nota,fecha)
+
+        B) Todas las claves no primarias dependen de la clave primaria.
+        C) ALUMNOS: legajo
+           TELEFONOS_OPCIONALES: legajo
+           CURSOS: codigo
+           BOLETAS: legajo,curso
+
+10.6.7) PEDIDOS(cliente_nombre,fecha,isbn,titulo,autor,cantidad,importe_libro)
+
+        CLIENTES(dni,nombre)
+        LIBROS(isbn,titulo,autor,importe)
+        PEDIDOS(dni,fecha,idbn,cantidad)
+
+10.6.8) DESPARTAMENTOS(numero,presupuesto,nro_gerente)
+        EMPLEADOS(nro_emp,nro_proyecto,nro_oficina,nro_telefono,titulo_trabajo,fecha_trabajo,salrio_trabajo)
+        PROYECTOS(nro_proyecto,presupuesto)
+        OFICINAS(nro_oficina,area,telefonos)
+
+        normalizada hasta 3FN:
+        DESPARTAMENTOS(numero,presupuesto,nro_gerente)
+        EMPLEADOS(nro_emp,nro_proyecto,nro_oficina,nro_telefono)
+        TRABAJOS(nro_emp,titulo_trabajo,fecha_trabajo)
+        SALARIOS(nro_emp,titulo_trabajo,salario)
+        PROYECTOS(nro_proyecto,presupuesto)
+        OFICINAS(nro_oficina,area)
+        TELEFONOS(nro_oficina,telefono)
+
+10.6.9) EMPLEADOS(nro_emp,tel,sueldo_hora)
+        PROYECTOS(nro_proyecto,finalizacion)
+        PROYECTOS_ASIGNACIONES(nro_emp,nro_proyecto)
+
+Pagina 109)
+
+11.7.1) Obtener los detalles completos de todos los productos.
+        PRODUCTOS
+
+11.7.2) Obtener los detalles completos de todos los proveedores de Capital.
+        PROVEEDORES WHERE LOCALIDAD = 'Capital'
+
+11.7.3) Obtener todos los envios en los cuales la cantidad esta entre 200 y 300 inclusive.
+        (PROV-PROD WHERE CANTIDAD >= 200 AND <= 300) [NUMERO]
+
+11.7.4) Obtener los numeros de los productos suministrados por algun proveedor de avellaneda.
+        PAVELLANEDA <- (PROVEEDORES WHERE LOCALIDAD = 'Avellaneda') [NUMERO]
+        ((PROV-PROD [NUMERO] JOIN PAVELLANEDA) [PNRO]
+
+11.7.5) Obtener los numeros de los productos y localidades en los cuales la segunda letra del nombre de la localidad sea "a".
+        (PRODUCTOS WHERE LOCALIDAD LIKE = '_a%') [PNRO,LOCALIDAD]
+
+11.7.6) Obtener los precios de los productos provistos por el proveedor 102.
+        P102 <- (PROV-PROD WHERE NUMERO = 102) [PNRO]
+        (PRODUCTOS [PNRO] JOIN P102) [PRECIO] (opcion 2)
+
+11.7.7) Construir una lista de todas las localidades en las cuales este situado por lo menos un proveedor o un producto.
+        PROVEEDORES [LOCALIDAD] UNION PRODUCTOS [LOCALIDAD]
+
+11.7.8) PROVINCIAS(COD_PROV,DESCR)
+        CLIENTES(NCLIE, NOMBRE, DOMICILIO, TEL, COD_PROV, COD_RUBRO)
+        RUBROS(COD_RUBRO,DESCR)
+        TRANSPORTES(PATENTE,MODELO,COD_TIPO)
+        FLOTAS(COD_TIPODESCR)
+        VIAJES(NVIAJE,PATENTE,NCLIE,COD_RUBRO,FECHA)
+
+        A) Obtener los codigos de gruas, modelos y patentes de las gruas que no operaran en el periodo analizado.
+           PATENTEOK <- (VIAJES WHERE = FECHA NOT BETWEEN X AND Y) [PATENTE]
+           COD_GRUA <- (FLOTAS WHERE DESCR = 'Grua') [COD_TIPO]
+           (TRANSPORTES WHERE PATENTE IN(PATENETOK) AND COD_TIPO = COD_GRUA)) [*]
+
+        B) Emitir una relacion que obtenga para cada provincia, los clientes que tiene.
+
+        c) Obtener los diferentes rubros los cuales se realizan los traslados.
+        RUBROS-VIAJES <- VIAJES [COD_RUBRO]
+        (RUBROS WHERE COD_RUBRO IN(RUBROS-VIAJES)) [DESCR]
+
+
